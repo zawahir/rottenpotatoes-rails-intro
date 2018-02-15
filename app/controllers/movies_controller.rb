@@ -7,14 +7,14 @@ class MoviesController < ApplicationController
   end
 
   def index
-        if params.key?(:sort_by)
-    			session[:sort_by] = params[:sort_by]
-    		elsif session.key?(:sort_by)
-    			params[:sort_by] = session[:sort_by]
-    			redirect_to movies_path(params) and return
-        end
-    		@hilite = sort_by = session[:sort_by]
-    		@all_ratings = Movie.all_ratings
+		if params.key?(:sort_by)
+			session[:sort_by] = params[:sort_by]
+		elsif session.key?(:sort_by)
+			params[:sort_by] = session[:sort_by]
+			redirect_to movies_path(params) and return
+		end
+		@hilite = sort_by = session[:sort_by]
+		@all_ratings = Movie.all_ratings
 		if params.key?(:ratings)
 			session[:ratings] = params[:ratings]
 		elsif session.key?(:ratings)
@@ -30,7 +30,7 @@ class MoviesController < ApplicationController
   end
 
   def create
-    @movie = Movie.create!(movie_params)
+    @movie = Movie.create!(params[:movie])
     flash[:notice] = "#{@movie.title} was successfully created."
     redirect_to movies_path
   end
@@ -41,7 +41,7 @@ class MoviesController < ApplicationController
 
   def update
     @movie = Movie.find params[:id]
-    @movie.update_attributes!(movie_params)
+    @movie.update_attributes!(params[:movie])
     flash[:notice] = "#{@movie.title} was successfully updated."
     redirect_to movie_path(@movie)
   end
